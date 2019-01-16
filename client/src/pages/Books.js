@@ -143,10 +143,11 @@ Screen View
 </ScreenBtn>            
 </Link> 
 
-
+<Link to={"/menuprint"}> 
 <PrintBtn>
 Print 
 </PrintBtn>
+</Link>
   
 <EmailBtn>
 Send Email
