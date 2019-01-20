@@ -15,25 +15,25 @@ function App() {
   return (
     <Router>
       <Security
-          issuer="https://dev-254707.oktapreview.com/oauth2/default"
-          client_id="0oaio6v9b84q31sUA0h7"
+          issuer= {"https://dev-254707.oktapreview.com/oauth2/default"}
+          client_id= "0oaio6v9b84q31sUA0h7"
           redirect_uri={window.location.origin + '/implicit/callback'}
           onAuthRequired={onAuthRequired}
         >
       <div>
   
         <Switch>
-          <SecureRoute exact path="/" component={Books} />
+        <Route exact path="/" component={Detail} />
+          <SecureRoute path="/books" exact={true} component={Books} />
           <Route
-                path="/"
+                path="/login"
                 render={() => (
-                  <Login baseUrl="https://dev-254707.oktapreview.com" />
+                  <Login baseUrl= 'https://dev-254707.oktapreview.com' />
                 )}
               />
               <Route path="/implicit/callback" component={ImplicitCallback} />
-          <Route exact path="/books" component={Books} />
+
           {/* <Route exact path="/books/:id" component={Detail} /> */}
-          <Route exact path="/menu" component={Detail} />
             <Route exact path="/menuprint" component={Print} />
           <Route component={NoMatch} />
         </Switch>
