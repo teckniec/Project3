@@ -32,8 +32,7 @@ function App() {
                 )}
               />
               <Route path="/implicit/callback" component={ImplicitCallback} />
-
-          {/* <Route exact path="/books/:id" component={Detail} /> */}
+              <Route exact path="/menu" component={Detail} />
             <Route exact path="/menuprint" component={Print} />
           <Route component={NoMatch} />
         </Switch>
