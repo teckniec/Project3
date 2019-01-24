@@ -1,42 +1,53 @@
 const express = require("express");
-
+const OktaJwtVerifier = require('@okta/jwt-verifier');
+const cors = require('cors');
 const mongoose = require("mongoose");
 const routes = require("./routes");
 const app = express();
 const PORT = process.env.PORT || 3001;
-const cors = require('cors');
-app.options('*', cors());
 
+require('dotenv').config()
 
-// CORS
-const whitelist = [
-  'https://dev-254707.oktapreview.com/oauth2/default', 
-  'https://dev-254707.oktapreview.com', 
-  'http://localhost:3000/implicit/callback',
-  'https://developer.okta.com'
-]
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
+const oktaJwtVerifier = new OktaJwtVerifier({ 
+  issuer: process.env.ISSUER,
+  clientId: process.env.CLIENT_ID
+})
+/**
+ * A simple middleware that asserts valid access tokens and sends 401 responses
+ * if the token is not present or fails validation.  If the token is valid its
+ * contents are attached to req.jwt
+ */
+
+function authenticationRequired(req, res, next) {
+  const authHeader = req.headers.authorization || '';
+  const match = authHeader.match(/Bearer (.+)/);
+
+  if (!match) {
+    return res.status(401).end();
   }
+
+  const accessToken = match[1];
+
+  return oktaJwtVerifier.verifyAccessToken(accessToken)
+    .then((jwt) => {
+      req.jwt = jwt;
+      next();
+    })
+    .catch((err) => {
+      res.status(401).send(err.message);
+    });
 }
 
-// Then pass them to cors:
-app.use(cors(corsOptions));
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.use(cors());
+
+app.get('/', authenticationRequired, (req, res) => {
+  res.json(req.jwt);
 });
 
-// Define middleware here
+
+// middleware 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 // Serve up static assets (usually on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
@@ -45,10 +56,12 @@ if (process.env.NODE_ENV === "production") {
 app.use(routes);
 
 // Connect to the Mongo DB
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/reactreadinglist");
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/shinbay");
+
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/shinbaymenu");
 
 // Start the API server
 app.listen(PORT, function() {
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`);
 });
-
