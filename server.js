@@ -7,17 +7,18 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 require('dotenv').config()
-
+/*
 const oktaJwtVerifier = new OktaJwtVerifier({ 
   issuer: process.env.ISSUER,
   clientId: process.env.CLIENT_ID
 })
+*/
 /**
  * A simple middleware that asserts valid access tokens and sends 401 responses
  * if the token is not present or fails validation.  If the token is valid its
  * contents are attached to req.jwt
  */
-
+/*
 function authenticationRequired(req, res, next) {
   const authHeader = req.headers.authorization || '';
   const match = authHeader.match(/Bearer (.+)/);
@@ -38,14 +39,15 @@ function authenticationRequired(req, res, next) {
     });
 }
 
-app.use(cors());
+
 
 app.get('/', authenticationRequired, (req, res) => {
   res.json(req.jwt);
 });
 
-
+*/
 // middleware 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Serve up static assets (usually on heroku)
