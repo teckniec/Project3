@@ -47,7 +47,12 @@ app.get('/', authenticationRequired, (req, res) => {
 
 */
 // middleware 
-app.use(cors());
+app.use(cors({
+  methods: 'GET,POST,PATCH,DELETE,OPTIONS',
+  optionsSuccessStatus: 200,
+  origin: 'https://desolate-waters-64620.herokuapp.com'
+}));
+app.options('*', cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Serve up static assets (usually on heroku)
