@@ -38,7 +38,6 @@ export default withAuth (class Admin extends Component {
 
   async componentDidUpdate() {
     this.checkAuthentication();
-    this.loadAdmin();
   }
 
   login = async () => {
@@ -70,6 +69,7 @@ export default withAuth (class Admin extends Component {
 
   handleInputChange = event => {
     const { name, value } = event.target;
+    console.log(name, value);
     this.setState({
       [name]: value
     });

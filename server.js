@@ -7,6 +7,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 require('dotenv').config()
+
+
+/////////////     Jwt for server deployment, not compatible with heroku!     ////////////////////
 /*
 const oktaJwtVerifier = new OktaJwtVerifier({ 
   issuer: process.env.ISSUER,
@@ -44,8 +47,10 @@ function authenticationRequired(req, res, next) {
 app.get('/', authenticationRequired, (req, res) => {
   res.json(req.jwt);
 });
-
 */
+
+/////////////// End Jwt /////////////////////////
+
 // middleware 
 app.use(cors({
   methods: 'GET,POST,PATCH,DELETE,OPTIONS',
@@ -66,7 +71,6 @@ app.use(routes);
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/shinbay");
 
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/shinbaymenu");
 
 // Start the API server
 app.listen(PORT, function() {
