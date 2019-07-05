@@ -7,10 +7,10 @@ user to update the menu.
 
 ## Requirements
 
-Node
-OKTA API key
-Express
-HandleBars
-React
-Node-Sass
+* Node 
+* OKTA Account 
+* Express 
+* HandleBars 
+* ReactJS 
+* Node-Sass 
 
